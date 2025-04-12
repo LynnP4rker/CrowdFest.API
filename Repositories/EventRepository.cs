@@ -12,22 +12,22 @@ internal sealed class EventRepository : IEventRepository
         _context = context;
     }
 
-    public Task CreateAsync(EventEntity eventEntity, CancellationToken cancellationToken)
+    public async Task CreateAsync(EventEntity eventEntity, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task DeleteAsync(EventEntity eventEntity, CancellationToken cancellationToken)
+    public async Task DeleteAsync(EventEntity eventEntity, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<EventEntity>> ListAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<EventEntity>> ListAsync(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    public Task<EventEntity> RetrieveAsync(int id, CancellationToken cancellationToken)
+    public async Task<EventEntity> RetrieveAsync(int id, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
