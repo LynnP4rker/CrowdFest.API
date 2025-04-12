@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrowdFest.API", "CrowdFest.API.csproj", "{C782CFAA-4542-B8D7-168F-44C18A1F0523}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C782CFAA-4542-B8D7-168F-44C18A1F0523}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C782CFAA-4542-B8D7-168F-44C18A1F0523}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C782CFAA-4542-B8D7-168F-44C18A1F0523}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C782CFAA-4542-B8D7-168F-44C18A1F0523}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1D7187C0-2837-4E48-9409-44BDD9597DE8}
+	EndGlobalSection
+EndGlobal

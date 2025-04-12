@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "HUTR8RXPi5b8GFQEhm2VpbqykGoqrto45CNicrhjXuw=",
+  "Source": "CrowdFest.API",
+  "BasePath": "_content/CrowdFest.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
