@@ -3,5 +3,6 @@ namespace CrowdFest.API.Models;
 public record UserDto 
 (
     string emailAddress,
-    string password
+    string firstName,
+    string lastName
 );

@@ -9,7 +9,7 @@ public record EventDto (
     string title,
     string description,
     DateTime date,
-    string location,
-    string theme,
+    Guid locationId,
+    Guid themeId,
     Priority priority
 );

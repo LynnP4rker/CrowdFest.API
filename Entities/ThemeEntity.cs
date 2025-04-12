@@ -2,7 +2,8 @@ namespace CrowdFest.API.Entities;
 
 public class ThemeEntity
 {
-    public Guid id { get; set; }
+    public Guid themeId { get; set; }
+    public Guid plannerId { get; set; }
     public string name { get; set; }
     public string  nameNormalised { get; set; }
     public string description { get; set; }

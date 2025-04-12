@@ -9,6 +9,7 @@ public sealed class ThemeConfiguration : IEntityTypeConfiguration<ThemeEntity>
 {
     void IEntityTypeConfiguration<ThemeEntity>.Configure(EntityTypeBuilder<ThemeEntity> builder)
     {
+        //Property Configuration
         builder
             .Property(t => t.name)
             .HasMaxLength(Constants.THEMELENGTH);
@@ -20,5 +21,15 @@ public sealed class ThemeConfiguration : IEntityTypeConfiguration<ThemeEntity>
         builder
             .Property(t => t.description)
             .HasMaxLength(Constants.DESCRIPTIONLENGTH);
+        
+        //Relationship Configuration
+        builder
+            .HasKey(t => t.themeId);
+        
+        builder
+            .HasOne<PlannerEntity>()
+            .WithMany()
+            .HasForeignKey(t => t.plannerId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

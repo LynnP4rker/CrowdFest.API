@@ -1,7 +1,8 @@
 namespace CrowdFest.API.Models;
 
 public record ThemeDto (
-    Guid id,
+    Guid themeId,
+    Guid plannerId,
     string name,
     string description
 );

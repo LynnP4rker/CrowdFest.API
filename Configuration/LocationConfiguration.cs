@@ -9,16 +9,19 @@ public sealed class LocationConfiguration : IEntityTypeConfiguration<LocationEnt
 {
     void IEntityTypeConfiguration<LocationEntity>.Configure(EntityTypeBuilder<LocationEntity> builder)
     {
-        builder
-            .Property(l => l.name)
-            .HasMaxLength(Constants.LOCATIONLENGTH);
-        
+        //Property Configuration
         builder
             .HasIndex(l => l.nameNormalised)
             .IsUnique();
         
+        //Relationship configuration
         builder
-            .Property(l => l.description)
-            .HasMaxLength(Constants.DESCRIPTIONLENGTH);
+            .HasKey(l => l.locationId);
+            
+        builder
+            .HasOne<PlannerEntity>()
+            .WithMany()
+            .HasForeignKey(t => t.plannerId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

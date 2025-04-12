@@ -11,20 +11,20 @@ public sealed class EventConfiguration : IEntityTypeConfiguration<EventEntity>
     {
         //Property Configuration
         builder
-            .Property(e => e.title)
-            .HasMaxLength(Constants.TITLELENGTH);
+            .Property(e => e.priority)
+            .HasConversion<string>();
         
         builder
-            .Property(e => e.description)
-            .HasMaxLength(Constants.DESCRIPTIONLENGTH);
+            .HasOne<LocationEntity>()
+            .WithOne()
+            .HasForeignKey<EventEntity>(l => l.locationId)
+            .OnDelete(DeleteBehavior.NoAction);
         
         builder
-            .Property(e => e.location)
-            .HasMaxLength(Constants.LOCATIONLENGTH);
-        
-        builder
-            .Property(e => e.theme)
-            .HasMaxLength(Constants.THEMELENGTH);
+            .HasOne<ThemeEntity>()
+            .WithOne()
+            .HasForeignKey<EventEntity>(t => t.themeId)
+            .OnDelete(DeleteBehavior.NoAction);
         
         //Relationship configuration
         builder

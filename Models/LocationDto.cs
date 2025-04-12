@@ -1,7 +1,8 @@
 namespace CrowdFest.API.Models;
 
 public record LocationDto (
-    Guid id,
+    Guid locationId,
+    Guid plannerId,
     string name,
     string description
 );

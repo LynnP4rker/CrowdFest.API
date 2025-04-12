@@ -1,3 +1,4 @@
+using CrowdFest.API.Configuration;
 using CrowdFest.API.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,6 +18,16 @@ public class CrowdFestDbContext: DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        //Configuartions
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfiguration(new EventConfiguration());
+        modelBuilder.ApplyConfiguration(new GroupConfiguration());
+        modelBuilder.ApplyConfiguration(new LocationConfiguration());
+        modelBuilder.ApplyConfiguration(new PlannerConfiguration());
+        modelBuilder.ApplyConfiguration(new PlannerGroupConfiguration());
+        modelBuilder.ApplyConfiguration(new ThemeConfiguration());
+        modelBuilder.ApplyConfiguration(new VoteConfiguration());
+
         // For future Lynn, encryption for PII in the fields go here
     }
 }

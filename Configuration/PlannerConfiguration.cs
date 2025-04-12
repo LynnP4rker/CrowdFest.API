@@ -9,26 +9,10 @@ public sealed class PlannerConfiguration : IEntityTypeConfiguration<PlannerEntit
 {
     void IEntityTypeConfiguration<PlannerEntity>.Configure(EntityTypeBuilder<PlannerEntity> builder) 
     {
-        //Property configuration
+        //Priority configuration
         builder
-            .Property(p => p.displayName)
-            .HasMaxLength(Constants.DISPLAYNAMELENGTH);
-        
-        builder
-            .Property(p => p.firstName)
-            .HasMaxLength(Constants.FIRSTNAMELENGTH);
-        
-        builder
-            .Property(p => p.lastName)
-            .HasMaxLength(Constants.LASTNAMELENGTH);
-        
-        builder
-            .Property(p => p.emailAddress)
-            .HasMaxLength(Constants.EMAILADDRESSLENGTH);
-        
-        builder
-            .Property(p => p.phoneNumber)
-            .HasMaxLength(Constants.PHONENUMBERLENGTH);
+            .Property(p => p.gender)
+            .HasConversion<string>();
 
         //Relationship configuration
         builder
