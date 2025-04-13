@@ -270,3 +270,6 @@
 /Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/obj/Debug/net9.0/CrowdFest.API.sourcelink.json
 /Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/MySqlConnector.dll
 /Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Pomelo.EntityFrameworkCore.MySql.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
