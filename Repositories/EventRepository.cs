@@ -1,5 +1,7 @@
 using CrowdFest.API.Abstractions.Repositories;
 using CrowdFest.API.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CrowdFest.API.Repositories;
 
@@ -12,28 +14,39 @@ internal sealed class EventRepository : IEventRepository
         _context = context;
     }
 
-    public async Task CreateAsync(EventEntity eventEntity, CancellationToken cancellationToken)
+    public Task CreateAsync(EventEntity eventEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _context.events.AddAsync(eventEntity, cancellationToken)
+        .AsTask();
     }
 
-    public async Task DeleteAsync(EventEntity eventEntity, CancellationToken cancellationToken)
+    public Task DeleteAsync(EventEntity eventEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _context.events.Remove(eventEntity);
+        return Task.CompletedTask;
     }
 
     public async Task<IEnumerable<EventEntity>> ListAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        IEnumerable<EventEntity> eventEntities = 
+            await _context.events
+                .AsNoTracking()
+                .ToArrayAsync(cancellationToken);
+        
+        return eventEntities;
     }
 
-    public async Task<EventEntity> RetrieveAsync(int id, CancellationToken cancellationToken)
+    public Task<EventEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _context.events
+            .AsNoTracking()
+            .FirstOrDefaultAsync(e => e.id.Equals(id), cancellationToken);
     }
 
     public Task UpdateAsync(EventEntity eventEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        EntityEntry<EventEntity> entry = _context.events.Entry(eventEntity);
+        entry.State = EntityState.Modified;
+        return Task.CompletedTask;
     }
 }

@@ -1,5 +1,7 @@
 using CrowdFest.API.Abstractions.Repositories;
 using CrowdFest.API.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CrowdFest.API.Repositories;
 
@@ -14,26 +16,38 @@ internal sealed class LocationRepository : ILocationRepository
 
     public Task CreateAsync(LocationEntity locationEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _context.locations
+                .AddAsync(locationEntity, cancellationToken)
+                .AsTask();
     }
 
     public Task DeleteAsync(LocationEntity locationEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _context.locations.Remove(locationEntity);
+        return Task.CompletedTask;
     }
 
-    public Task<IEnumerable<LocationEntity>> ListAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<LocationEntity>> ListAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        IEnumerable<LocationEntity> entities = 
+            await _context.locations
+                .AsNoTracking()
+                .ToArrayAsync(cancellationToken);
+        
+        return entities;
     }
 
-    public Task<LocationEntity> RetrieveAsync(int id, CancellationToken cancellationToken)
+    public Task<LocationEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _context.locations
+            .AsNoTracking()
+            .FirstOrDefaultAsync(l => l.locationId.Equals(id), cancellationToken);
     }
 
     public Task UpdateAsync(LocationEntity locationEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        EntityEntry<LocationEntity> entry = _context.locations.Entry(locationEntity);
+        entry.State = EntityState.Modified;
+        return Task.CompletedTask;
     }
 }

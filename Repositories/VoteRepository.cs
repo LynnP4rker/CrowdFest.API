@@ -1,5 +1,7 @@
 using CrowdFest.API.Abstractions.Repositories;
 using CrowdFest.API.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CrowdFest.API.Repositories;
 
@@ -12,26 +14,38 @@ internal sealed class VoteRepository : IVoteRepository
     }
     public Task CreateAsync(VoteEntity voteEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _context.votes
+                .AddAsync(voteEntity, cancellationToken)
+                .AsTask();
     }
 
     public Task DeleteAsync(VoteEntity voteEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _context.votes.Remove(voteEntity);
+        return Task.CompletedTask;
     }
 
-    public Task<IEnumerable<VoteEntity>> ListAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<VoteEntity>> ListAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        IEnumerable<VoteEntity> entities = 
+            await _context.votes
+                .AsNoTracking()
+                .ToListAsync();
+        
+        return entities;
     }
 
-    public Task<VoteEntity> RetrieveAsync(int id, CancellationToken cancellationToken)
+    public Task<VoteEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _context.votes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(v => v.id.Equals(id), cancellationToken);
     }
 
     public Task UpdateAsync(VoteEntity voteEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        EntityEntry<VoteEntity> entry = _context.votes.Entry(voteEntity);
+        entry.State = EntityState.Modified;
+        return Task.CompletedTask;
     }
 }

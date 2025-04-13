@@ -1,5 +1,7 @@
 using CrowdFest.API.Abstractions.Repositories;
 using CrowdFest.API.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CrowdFest.API.Repositories;
 
@@ -13,26 +15,38 @@ internal sealed class PlannerGroupRepository : IPlannerGroupRepository
     }
     public Task CreateAsync(PlannerGroupEntity plannerGroupEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _context.plannerGroups
+                .AddAsync(plannerGroupEntity, cancellationToken)
+                .AsTask();
     }
 
     public Task DeleteAsync(PlannerGroupEntity plannerGroupEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _context.plannerGroups.Remove(plannerGroupEntity);
+        return Task.CompletedTask;
     }
 
-    public Task<IEnumerable<PlannerGroupEntity>> ListAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<PlannerGroupEntity>> ListAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        IEnumerable<PlannerGroupEntity> entities = 
+            await _context.plannerGroups
+                .AsNoTracking()
+                .ToArrayAsync(cancellationToken);
+        
+        return entities;
     }
 
-    public Task<PlannerGroupEntity> RetrieveAsync(int id, CancellationToken cancellationToken)
+    public Task<PlannerGroupEntity?> RetrieveAsync(Guid plannerId, Guid groupId,  CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _context.plannerGroups
+                .AsNoTracking()
+                .FirstOrDefaultAsync(p => p.plannerId.Equals(plannerId) && p.groupId.Equals(groupId), cancellationToken);
     }
 
     public Task UpdateAsync(PlannerGroupEntity plannerGroupEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        EntityEntry<PlannerGroupEntity> entry = _context.plannerGroups.Entry(plannerGroupEntity);
+        entry.State = EntityState.Modified;
+        return Task.CompletedTask;
     }
 }

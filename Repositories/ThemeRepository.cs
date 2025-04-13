@@ -1,5 +1,7 @@
 using CrowdFest.API.Abstractions.Repositories;
 using CrowdFest.API.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace CrowdFest.API.Repositories;
 
@@ -13,26 +15,37 @@ internal sealed class ThemeRepository : IThemeRepository
     }
     public Task CreateAsync(ThemeEntity themeEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _context.themes.AddAsync(themeEntity, cancellationToken)
+            .AsTask();
     }
 
     public Task DeleteAsync(ThemeEntity themeEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        _context.themes.Remove(themeEntity);
+        return Task.CompletedTask;
     }
 
-    public Task<IEnumerable<ThemeEntity>> ListAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<ThemeEntity>> ListAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        IEnumerable<ThemeEntity> entities = 
+            await _context.themes
+                .AsNoTracking()
+                .ToArrayAsync();
+        
+        return entities;
     }
 
-    public Task<ThemeEntity> RetrieveAsync(int id, CancellationToken cancellationToken)
+    public Task<ThemeEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _context.themes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(t => t.themeId.Equals(id), cancellationToken);
     }
 
     public Task UpdateAsync(ThemeEntity themeEntity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        EntityEntry<ThemeEntity> entry = _context.themes.Entry(themeEntity);
+        entry.State = EntityState.Modified;
+        return Task.CompletedTask;
     }
 }
