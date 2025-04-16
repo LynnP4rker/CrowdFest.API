@@ -283,6 +283,9 @@ namespace CrowdFest.API.Migrations
                     b.Property<Guid>("locationId")
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid>("plannerId")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("priority")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -304,6 +307,8 @@ namespace CrowdFest.API.Migrations
 
                     b.HasIndex("locationId")
                         .IsUnique();
+
+                    b.HasIndex("plannerId");
 
                     b.HasIndex("themeId")
                         .IsUnique();
@@ -392,6 +397,12 @@ namespace CrowdFest.API.Migrations
                         .WithOne()
                         .HasForeignKey("CrowdFest.API.Entities.VoteEntity", "locationId")
                         .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("CrowdFest.API.Entities.PlannerEntity", null)
+                        .WithMany()
+                        .HasForeignKey("plannerId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CrowdFest.API.Entities.ThemeEntity", null)

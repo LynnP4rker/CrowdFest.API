@@ -4,6 +4,7 @@ namespace CrowdFest.API.Models;
 
 public record VoteDto (
     Guid id,
+    Guid plannerId,
     Guid groupId,
     Guid eventId,
     string title,

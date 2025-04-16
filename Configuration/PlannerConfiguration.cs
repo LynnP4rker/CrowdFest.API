@@ -26,5 +26,11 @@ public sealed class PlannerConfiguration : IEntityTypeConfiguration<PlannerEntit
             .WithOne()
             .HasForeignKey<PostEntity>(p => p.plannerId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder
+            .HasMany<VoteEntity>()
+            .WithOne()
+            .HasForeignKey(p => p.plannerId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

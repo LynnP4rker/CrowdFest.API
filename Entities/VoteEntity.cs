@@ -5,6 +5,7 @@ namespace CrowdFest.API.Entities;
 public class VoteEntity 
 {
     public Guid id { get; set; }
+    public Guid plannerId { get; set; }
     public Guid groupId { get; set; }
     public Guid eventId { get; set; }
     public string title { get; set; }

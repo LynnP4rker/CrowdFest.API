@@ -219,6 +219,7 @@ namespace CrowdFest.API.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    plannerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     groupId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     eventId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     title = table.Column<string>(type: "longtext", nullable: false)
@@ -251,6 +252,12 @@ namespace CrowdFest.API.Migrations
                         column: x => x.locationId,
                         principalTable: "locations",
                         principalColumn: "locationId");
+                    table.ForeignKey(
+                        name: "FK_votes_planners_plannerId",
+                        column: x => x.plannerId,
+                        principalTable: "planners",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_votes_themes_themeId",
                         column: x => x.themeId,
@@ -332,6 +339,11 @@ namespace CrowdFest.API.Migrations
                 table: "votes",
                 column: "locationId",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_votes_plannerId",
+                table: "votes",
+                column: "plannerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_votes_themeId",
