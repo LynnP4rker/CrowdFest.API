@@ -35,11 +35,27 @@ internal sealed class ThemeRepository : IThemeRepository
         return entities;
     }
 
-    public Task<ThemeEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<IEnumerable<ThemeEntity>> ListPlannerThemesAsync(Guid plannerId, CancellationToken cancellationToken)
+    {
+        IEnumerable<ThemeEntity> entities = 
+            await _context.themes
+                .AsNoTracking()
+                .Where(t => t.plannerId.Equals(plannerId))
+                .ToArrayAsync();
+        
+        return entities;
+    }
+
+    public Task<ThemeEntity?> RetrieveAsync(Guid id, Guid plannerId, CancellationToken cancellationToken)
     {
         return _context.themes
             .AsNoTracking()
-            .FirstOrDefaultAsync(t => t.themeId.Equals(id), cancellationToken);
+            .FirstOrDefaultAsync(t => t.themeId.Equals(id) && t.plannerId.Equals(plannerId), cancellationToken);
+    }
+
+    public Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return _context.SaveChangesAsync();
     }
 
     public Task UpdateAsync(ThemeEntity themeEntity, CancellationToken cancellationToken)

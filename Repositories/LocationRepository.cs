@@ -44,6 +44,11 @@ internal sealed class LocationRepository : ILocationRepository
             .FirstOrDefaultAsync(l => l.locationId.Equals(id), cancellationToken);
     }
 
+    public Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return _context.SaveChangesAsync();
+    }
+
     public Task UpdateAsync(LocationEntity locationEntity, CancellationToken cancellationToken)
     {
         EntityEntry<LocationEntity> entry = _context.locations.Entry(locationEntity);

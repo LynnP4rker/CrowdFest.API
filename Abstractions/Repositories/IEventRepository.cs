@@ -9,4 +9,5 @@ public interface IEventRepository
     Task<IEnumerable<EventEntity>> ListAsync (CancellationToken cancellationToken);
     Task<EventEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken);
     Task UpdateAsync(EventEntity eventEntity, CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

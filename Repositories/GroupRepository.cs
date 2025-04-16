@@ -44,6 +44,11 @@ internal sealed class GroupRepository : IGroupRepository
                 .FirstOrDefaultAsync(g => g.id.Equals(id), cancellationToken);
     }
 
+    public Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return _context.SaveChangesAsync();
+    }
+
     public Task UpdateAsync(GroupEntity groupEntity, CancellationToken cancellationToken)
     {
         EntityEntry<GroupEntity> entry = _context.groups.Entry(groupEntity);

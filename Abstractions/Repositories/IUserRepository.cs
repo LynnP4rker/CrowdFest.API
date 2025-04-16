@@ -9,4 +9,5 @@ public interface IUserRepository
     Task<IEnumerable<UserEntity>> ListAsync(CancellationToken cancellationToken);
     Task<UserEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken);
     Task UpdateAsync(UserEntity userEntity, CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

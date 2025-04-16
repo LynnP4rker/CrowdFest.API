@@ -43,6 +43,11 @@ internal sealed class EventRepository : IEventRepository
             .FirstOrDefaultAsync(e => e.id.Equals(id), cancellationToken);
     }
 
+    public Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return _context.SaveChangesAsync(cancellationToken);
+    }
+
     public Task UpdateAsync(EventEntity eventEntity, CancellationToken cancellationToken)
     {
         EntityEntry<EventEntity> entry = _context.events.Entry(eventEntity);

@@ -41,6 +41,11 @@ internal sealed class UserRepository : IUserRepository
             .FirstOrDefaultAsync(u => u.id.Equals(id), cancellationToken);
     }
 
+    public Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return _context.SaveChangesAsync();
+    }
+
     public Task UpdateAsync(UserEntity userEntity, CancellationToken cancellationToken)
     {
         EntityEntry<UserEntity> entry = _context.users.Entry(userEntity);

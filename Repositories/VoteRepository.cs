@@ -35,11 +35,26 @@ internal sealed class VoteRepository : IVoteRepository
         return entities;
     }
 
+    public async Task<IEnumerable<VoteEntity>> ListAsync(Guid groupId, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<VoteEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken)
     {
         return _context.votes
             .AsNoTracking()
             .FirstOrDefaultAsync(v => v.id.Equals(id), cancellationToken);
+    }
+
+    public Task<VoteEntity?> RetrieveAsync(Guid id, Guid groupId, Guid eventId, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 
     public Task UpdateAsync(VoteEntity voteEntity, CancellationToken cancellationToken)

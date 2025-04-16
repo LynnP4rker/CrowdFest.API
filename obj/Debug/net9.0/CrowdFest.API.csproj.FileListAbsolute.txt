@@ -273,3 +273,4 @@
 /Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
 /Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/AutoMapper.dll

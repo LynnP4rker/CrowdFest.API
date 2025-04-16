@@ -9,4 +9,5 @@ public interface ILocationRepository
     Task<IEnumerable<LocationEntity>> ListAsync(CancellationToken cancellationToken);
     Task<LocationEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken);
     Task UpdateAsync(LocationEntity locationEntity, CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

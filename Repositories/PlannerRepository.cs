@@ -42,6 +42,11 @@ internal sealed class PlannerRepository : IPlannerRepository
             .FirstOrDefaultAsync(p => p.id.Equals(id), cancellationToken);
     }
 
+    public Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return _context.SaveChangesAsync(cancellationToken);
+    }
+
     public Task UpdateAsync(PlannerEntity plannerEntity, CancellationToken cancellationToken)
     {
         EntityEntry<PlannerEntity> entry = _context.planners.Entry(plannerEntity);

@@ -36,11 +36,27 @@ internal sealed class PostRepository : IPostRepository
         return entities;
     }
 
-    public Task<PostEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<IEnumerable<PostEntity>> ListPlannerPostsAsync(Guid plannerId, CancellationToken cancellationToken)
+    {
+        IEnumerable<PostEntity> entities = 
+            await _context.posts
+                .AsNoTracking()
+                .Where(p => p.plannerId.Equals(plannerId))
+                .ToListAsync();
+        
+        return entities;
+    }
+
+    public Task<PostEntity?> RetrieveAsync(Guid id, Guid plannerId, CancellationToken cancellationToken)
     {
         return _context.posts
             .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.id.Equals(id), cancellationToken);
+            .FirstOrDefaultAsync(p => p.id.Equals(id) && p.plannerId.Equals(plannerId), cancellationToken);
+    }
+
+    public Task SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return _context.SaveChangesAsync();
     }
 
     public Task UpdateAsync(PostEntity postEntity, CancellationToken cancellationToken)

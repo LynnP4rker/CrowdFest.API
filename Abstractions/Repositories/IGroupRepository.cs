@@ -9,4 +9,5 @@ public interface IGroupRepository
     Task<IEnumerable<GroupEntity>> ListAsync(CancellationToken cancellationToken);
     Task<GroupEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken);
     Task UpdateAsync(GroupEntity groupEntity, CancellationToken cancellationToken);
+    Task SaveChangesAsync(CancellationToken cancellationToken);
 }

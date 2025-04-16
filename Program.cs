@@ -3,14 +3,11 @@ using CrowdFest.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddControllers();
 builder.Services.AddCrowdFestDbContext(builder.Configuration, "DefaultConnection");
 builder.Services.RegisterServices();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSwaggerGen();
-
-
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
@@ -21,6 +18,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.MapOpenApi();
 }
+
 app.UseHttpsRedirection();
+app.MapControllers();
 app.Run();
 

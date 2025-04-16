@@ -26,11 +26,13 @@ internal sealed class PlannerGroupRepository : IPlannerGroupRepository
         return Task.CompletedTask;
     }
 
-    public async Task<IEnumerable<PlannerGroupEntity>> ListAsync(CancellationToken cancellationToken)
+
+    public async Task<IEnumerable<PlannerGroupEntity>> ListAsync(Guid plannerId, CancellationToken cancellationToken)
     {
         IEnumerable<PlannerGroupEntity> entities = 
             await _context.plannerGroups
                 .AsNoTracking()
+                .Where(p => p.plannerId.Equals(plannerId))
                 .ToArrayAsync(cancellationToken);
         
         return entities;
@@ -43,10 +45,8 @@ internal sealed class PlannerGroupRepository : IPlannerGroupRepository
                 .FirstOrDefaultAsync(p => p.plannerId.Equals(plannerId) && p.groupId.Equals(groupId), cancellationToken);
     }
 
-    public Task UpdateAsync(PlannerGroupEntity plannerGroupEntity, CancellationToken cancellationToken)
+    public Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        EntityEntry<PlannerGroupEntity> entry = _context.plannerGroups.Entry(plannerGroupEntity);
-        entry.State = EntityState.Modified;
-        return Task.CompletedTask;
+        return _context.SaveChangesAsync();
     }
 }
