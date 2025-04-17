@@ -274,3 +274,12 @@
 /Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
 /Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/AutoMapper.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Microsoft.IdentityModel.Logging.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Microsoft.IdentityModel.Tokens.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/Newtonsoft.Json.dll
+/Users/ibrahimgimba/Desktop/VsCode/CrowdFest.API/bin/Debug/net9.0/System.IdentityModel.Tokens.Jwt.dll

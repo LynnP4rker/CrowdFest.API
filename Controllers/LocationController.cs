@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class LocationController: ControllerBase
 {
     private readonly ILocationRepository _repository;

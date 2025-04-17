@@ -8,6 +8,7 @@ namespace CrowdFest.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class PlannerController: ControllerBase
 {
     private readonly IPlannerRepository _repository;

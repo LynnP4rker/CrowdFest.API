@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("id/[controller]")]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class ThemeController: ControllerBase
 {
     private readonly IThemeRepository _repository;

@@ -1,5 +1,6 @@
 using CrowdFest.API.Abstractions.Repositories;
 using CrowdFest.API.Repositories;
+using Microsoft.AspNetCore.Identity;
 
 namespace CrowdFest.API.Services;
 public static class ServiceCollectionExtensions
@@ -15,6 +16,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IThemeRepository, ThemeRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IVoteRepository, VoteRepository>();
+        services.AddScoped<IPasswordService, PasswordService>();
 
         return services;
     }

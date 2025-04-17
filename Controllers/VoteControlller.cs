@@ -4,6 +4,9 @@ using CrowdFest.API.Entities;
 using CrowdFest.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
+[ApiController]
+[Route("api/[controller]")]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class VoteController: ControllerBase
 {
     private readonly IVoteRepository _repository;

@@ -2,12 +2,15 @@ using AutoMapper;
 using CrowdFest.API.Abstractions.Repositories;
 using CrowdFest.API.Entities;
 using CrowdFest.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrowdFest.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class EventController: ControllerBase
 {
     private readonly IEventRepository _repository;
