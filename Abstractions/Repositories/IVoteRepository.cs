@@ -6,8 +6,9 @@ public interface IVoteRepository
 {
     Task CreateAsync(VoteEntity voteEntity, CancellationToken cancellationToken);
     Task DeleteAsync(VoteEntity voteEntity, CancellationToken cancellationToken);
-    Task<IEnumerable<VoteEntity>> ListAsync(Guid groupId, CancellationToken cancellationToken);
-    Task<VoteEntity?> RetrieveAsync(Guid id, Guid groupId, Guid eventId, CancellationToken cancellationToken);
+    Task<IEnumerable<VoteEntity>> ListVotesForGroupAsync(Guid groupId, CancellationToken cancellationToken);
+    Task<IEnumerable<VoteEntity>> ListVotesForPlannerAsync(Guid plannerId, CancellationToken cancellationToken);
+    Task<VoteEntity?> RetrieveAsync(Guid id, Guid plannerId, CancellationToken cancellationToken);
     Task UpdateAsync(VoteEntity voteEntity, CancellationToken cancellationToken);
     Task SaveChangesAsync(CancellationToken cancellationToken);
 }

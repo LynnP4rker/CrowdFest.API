@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CrowdFest.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4614bfb73abd472d42b74f5857f49ca3a08e73a3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2bb8495564c09e71aa38d64e6576f450efdccd1a")]
 [assembly: System.Reflection.AssemblyProductAttribute("CrowdFest.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CrowdFest.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

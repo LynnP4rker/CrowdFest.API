@@ -25,36 +25,39 @@ internal sealed class VoteRepository : IVoteRepository
         return Task.CompletedTask;
     }
 
-    public async Task<IEnumerable<VoteEntity>> ListAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<VoteEntity>> ListVotesForGroupAsync(Guid groupId, CancellationToken cancellationToken)
     {
         IEnumerable<VoteEntity> entities = 
             await _context.votes
                 .AsNoTracking()
+                .Where(v => v.groupId.Equals(groupId))
                 .ToListAsync();
         
         return entities;
     }
 
-    public async Task<IEnumerable<VoteEntity>> ListAsync(Guid groupId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<VoteEntity>> ListVotesForPlannerAsync(Guid plannerId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        IEnumerable<VoteEntity> entities = 
+            await _context.votes
+                .AsNoTracking()
+                .Where(v => v.plannerId.Equals(plannerId))
+                .ToListAsync();
+        
+        return entities;
     }
 
-    public Task<VoteEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken)
+    public Task<VoteEntity?> RetrieveAsync(Guid id, Guid plannerId, CancellationToken cancellationToken)
     {
         return _context.votes
             .AsNoTracking()
+            .Where(v => v.id.Equals(id) && v.plannerId.Equals(plannerId))
             .FirstOrDefaultAsync(v => v.id.Equals(id), cancellationToken);
-    }
-
-    public Task<VoteEntity?> RetrieveAsync(Guid id, Guid groupId, Guid eventId, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
     }
 
     public Task SaveChangesAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _context.SaveChangesAsync();
     }
 
     public Task UpdateAsync(VoteEntity voteEntity, CancellationToken cancellationToken)
