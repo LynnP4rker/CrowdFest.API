@@ -17,21 +17,13 @@ public class UserController: ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<UserDto>> RetrieveUserAsync(Guid id, CancellationToken cancellationToken)
+    [HttpGet("{emailaddress}")]
+    public async Task<ActionResult<UserDto>> RetrieveUserAsync(string emailaddress, CancellationToken cancellationToken)
     {
-        UserEntity? userEntity = await _repository.RetrieveAsync(id, cancellationToken);
+        UserEntity? userEntity = await _repository.RetrieveAsync(emailaddress, cancellationToken);
         if (userEntity is null) return NotFound();
         UserDto user = _mapper.Map<UserDto>(userEntity);
         return Ok(user);
-    }
-
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserDto>>> ListUsersAsync(CancellationToken cancellationToken)
-    {
-        IEnumerable<UserEntity> userEntities = await _repository.ListAsync(cancellationToken);
-        IEnumerable<UserDto> users = _mapper.Map<IEnumerable<UserDto>>(userEntities);
-        return Ok(users);
     }
 
     [HttpPost]
@@ -44,20 +36,20 @@ public class UserController: ControllerBase
         return CreatedAtAction(nameof(RetrieveUserAsync), new { id = userEntity.id}, returnedUser);
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUserAsync(Guid id, CancellationToken cancellationToken)
+    [HttpDelete("{emailaddress}")]
+    public async Task<IActionResult> DeleteUserAsync(string emailaddress, CancellationToken cancellationToken)
     {
-        UserEntity? userEntity = await _repository.RetrieveAsync(id, cancellationToken);
+        UserEntity? userEntity = await _repository.RetrieveAsync(emailaddress, cancellationToken);
         if (userEntity is null) return NoContent();
         await _repository.DeleteAsync(userEntity, cancellationToken);
         await _repository.SaveChangesAsync(cancellationToken);
         return NoContent();
     }
 
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateUserAsync(Guid id, [FromBody] UserDto user, CancellationToken cancellationToken)
+    [HttpPut("{emailaddress}")]
+    public async Task<IActionResult> UpdateUserAsync(string emailaddress, [FromBody] UserDto user, CancellationToken cancellationToken)
     {
-        UserEntity? userEntity = await _repository.RetrieveAsync(id, cancellationToken);
+        UserEntity? userEntity = await _repository.RetrieveAsync(emailaddress, cancellationToken);
         if (userEntity is null) return NotFound();
         _mapper.Map(user, userEntity);
         await _repository.UpdateAsync(userEntity, cancellationToken);

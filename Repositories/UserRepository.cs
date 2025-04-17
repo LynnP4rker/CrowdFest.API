@@ -24,21 +24,11 @@ internal sealed class UserRepository : IUserRepository
         return Task.CompletedTask;
     }
 
-    public async Task<IEnumerable<UserEntity>> ListAsync(CancellationToken cancellationToken)
-    {
-        IEnumerable<UserEntity> entities = 
-            await _context.users
-                .AsNoTracking()
-                .ToArrayAsync();
-        
-        return entities;
-    }
-
-    public Task<UserEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken)
+    public Task<UserEntity?> RetrieveAsync(string emailAddress, CancellationToken cancellationToken)
     {
         return _context.users
             .AsNoTracking()
-            .FirstOrDefaultAsync(u => u.id.Equals(id), cancellationToken);
+            .FirstOrDefaultAsync(u => u.emailAddress.Equals(emailAddress), cancellationToken);
     }
 
     public Task SaveChangesAsync(CancellationToken cancellationToken)
