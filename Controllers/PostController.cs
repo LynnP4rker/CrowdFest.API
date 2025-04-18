@@ -3,10 +3,12 @@ using AutoMapper;
 using CrowdFest.API.Abstractions.Repositories;
 using CrowdFest.API.Entities;
 using CrowdFest.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class PostController: ControllerBase
 {
     private readonly IPostRepository _repository;
@@ -19,6 +21,8 @@ public class PostController: ControllerBase
     }
 
     [HttpGet("{plannerId:guid}/{postId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<PostDto>> RetrievePostAsync(Guid postId, Guid plannerId, CancellationToken cancellationToken)
     {
         PostEntity? postEntity = await _repository.RetrieveAsync(postId, plannerId, cancellationToken);
@@ -28,6 +32,7 @@ public class PostController: ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PostDto>>> ListPostsAsync(CancellationToken cancellationToken)
     {
         IEnumerable<PostEntity> postEntities = await _repository.ListAsync(cancellationToken);
@@ -36,6 +41,7 @@ public class PostController: ControllerBase
     }
 
     [HttpGet("{plannerId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PostDto>>> ListPostsForPlannerAsync(Guid plannerId, CancellationToken cancellationToken)
     {
         IEnumerable<PostEntity> postEntities = await _repository.ListPlannerPostsAsync(plannerId, cancellationToken);
@@ -44,6 +50,7 @@ public class PostController: ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreatePostAsync([FromBody] PostDto post, CancellationToken cancellationToken)
     {
         PostEntity postEntity = _mapper.Map<PostEntity>(post);
@@ -54,6 +61,7 @@ public class PostController: ControllerBase
     }
 
     [HttpDelete("{plannerId:guid}/{postId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> RemovePostAsync(Guid plannerId, Guid postId, CancellationToken cancellationToken)
     {
         PostEntity? postEntity = await _repository.RetrieveAsync(plannerId, postId, cancellationToken);
@@ -64,6 +72,9 @@ public class PostController: ControllerBase
     }
 
     [HttpPut("{plannerId:guid}/{postId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdatePostAsync(Guid plannerId, Guid postId, [FromBody] PostDto post, CancellationToken cancellationToken)
     {
         if ( plannerId != post.plannerId && postId != post.id) return BadRequest ("ID in URL doesn't match the body"); 

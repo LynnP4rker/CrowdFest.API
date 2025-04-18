@@ -29,5 +29,7 @@ public class MapperProfile: Profile
 
         CreateMap<UserDto, UserEntity>();
         CreateMap<UserEntity, UserDto>();
+
+        CreateMap<RegisterDto, UserEntity>();
     }
 }

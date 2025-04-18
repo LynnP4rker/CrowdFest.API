@@ -4,6 +4,9 @@ using CrowdFest.API.Entities;
 using CrowdFest.API.Models;
 using Microsoft.AspNetCore.Mvc;
 
+[ApiController]
+[Route("api/[controller]")]
+
 public class VoteController: ControllerBase
 {
     private readonly IVoteRepository _repository;
@@ -15,7 +18,9 @@ public class VoteController: ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet("{id:guid}/{planner:guid}")]
+    [HttpGet("{id:guid}/{plannerId:guid}")]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<VoteDto>> RetrieveVoteAsync(Guid id, Guid plannerId, CancellationToken cancellationToken)
     {
         VoteEntity? voteEntity = await _repository.RetrieveAsync(id, plannerId, cancellationToken);
@@ -25,6 +30,7 @@ public class VoteController: ControllerBase
     }
 
     [HttpGet("{groupId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<VoteDto>>> ListVotesForGroupAsync(Guid groupId, CancellationToken cancellationToken)
     {
         IEnumerable<VoteEntity> voteEntities = await _repository.ListVotesForGroupAsync(groupId, cancellationToken);
@@ -33,6 +39,7 @@ public class VoteController: ControllerBase
     }
 
     [HttpGet("{plannerId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<VoteDto>>> ListVotesForPlannerAsync(Guid plannerId, CancellationToken cancellationToken)
     {
         IEnumerable<VoteEntity> voteEntities = await _repository.ListVotesForPlannerAsync(plannerId, cancellationToken);
@@ -41,6 +48,7 @@ public class VoteController: ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateVoteAsync([FromBody] VoteDto vote, CancellationToken cancellationToken)
     {
         VoteEntity voteEntity = _mapper.Map<VoteEntity>(vote);
@@ -51,6 +59,8 @@ public class VoteController: ControllerBase
     }
 
     [HttpDelete("{id:guid}/{planner:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteVoteAsync(Guid id, Guid plannerId, CancellationToken cancellationToken)
     {
         VoteEntity? voteEntity = await _repository.RetrieveAsync(id, plannerId, cancellationToken);
@@ -61,6 +71,9 @@ public class VoteController: ControllerBase
     }
 
     [HttpPut("{id:guid}/{planner:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateVoteAsync(Guid id, Guid plannerId, [FromBody] VoteDto vote, CancellationToken cancellationToken)
     {
         if ( plannerId != vote.plannerId && id != vote.id) return BadRequest ("ID in URL doesn't match the body"); 

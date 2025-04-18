@@ -2,12 +2,14 @@ using AutoMapper;
 using CrowdFest.API.Abstractions.Repositories;
 using CrowdFest.API.Entities;
 using CrowdFest.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrowdFest.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class PlannerController: ControllerBase
 {
     private readonly IPlannerRepository _repository;
@@ -21,6 +23,8 @@ public class PlannerController: ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<PlannerDto>> RetrievePlannerAsync(Guid id, CancellationToken cancellationToken)
     {
         PlannerEntity? plannerEntity = await _repository.RetrieveAsync(id, cancellationToken);
@@ -30,6 +34,7 @@ public class PlannerController: ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<PlannerDto>>> ListPlannersAsync(CancellationToken cancellationToken)
     {
         IEnumerable<PlannerEntity> plannerEntities = await _repository.ListAsync(cancellationToken);
@@ -38,6 +43,7 @@ public class PlannerController: ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreatePlannerAsync([FromBody] PlannerDto planner, CancellationToken cancellationToken)
     {
         PlannerEntity plannerEntity = _mapper.Map<PlannerEntity>(planner);
@@ -48,6 +54,8 @@ public class PlannerController: ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RemovePlannerAsync(Guid id, CancellationToken cancellationToken)
     {
         PlannerEntity? plannerEntity = await _repository.RetrieveAsync(id, cancellationToken);
@@ -58,6 +66,9 @@ public class PlannerController: ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdatePlannerAsync(Guid id, [FromBody] PlannerDto planner, CancellationToken cancellationToken)
     {
         if (id != planner.id) { return BadRequest ("ID in URL doesn't match the body"); }
