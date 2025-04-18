@@ -23,7 +23,7 @@ public class PasswordService: IPasswordService
 
     public bool Verfiy(string passwordHash, string password)
     {
-        var elements = password.Split(Delimiter);
+        var elements = passwordHash.Split(Delimiter);
         var salt = Convert.FromBase64String(elements[0]);
         var hash = Convert.FromBase64String(elements[1]);
 

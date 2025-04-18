@@ -2,11 +2,12 @@ using AutoMapper;
 using CrowdFest.API.Abstractions.Repositories;
 using CrowdFest.API.Entities;
 using CrowdFest.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("id/[controller]")]
-[ProducesResponseType(StatusCodes.Status401Unauthorized)]
+[Authorize]
 public class ThemeController: ControllerBase
 {
     private readonly IThemeRepository _repository;
@@ -19,6 +20,8 @@ public class ThemeController: ControllerBase
     }
 
     [HttpGet("{plannerId:guid}/{themeId:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<ThemeDto>> RetrieveThemeAsync(Guid plannerId, Guid themeId, CancellationToken cancellationToken)
     {
         ThemeEntity? themeEntity = await _repository.RetrieveAsync(themeId, plannerId, cancellationToken);
@@ -28,6 +31,7 @@ public class ThemeController: ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ThemeDto>>> ListThemesAsync(CancellationToken cancellationToken)
     {
         IEnumerable<ThemeEntity> themeEntities = await _repository.ListAsync(cancellationToken);
@@ -36,6 +40,7 @@ public class ThemeController: ControllerBase
     }
 
     [HttpGet("{plannerId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ThemeDto>>> ListThemesForPlannerAsync(Guid plannerId, CancellationToken cancellationToken)
     {
         IEnumerable<ThemeEntity> themeEntities = await _repository.ListPlannerThemesAsync(plannerId, cancellationToken);
@@ -44,6 +49,7 @@ public class ThemeController: ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateThemeAsync([FromBody] ThemeDto theme, CancellationToken cancellationToken)
     {
         ThemeEntity themeEntity = _mapper.Map<ThemeEntity>(theme);
@@ -54,6 +60,8 @@ public class ThemeController: ControllerBase
     }
 
     [HttpDelete("{plannerId:guid}/{themeId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteThemeAsync(Guid plannerId, Guid themeId, CancellationToken cancellationToken)
     {
         ThemeEntity? themeEntity = await _repository.RetrieveAsync(plannerId, themeId, cancellationToken);
@@ -64,6 +72,9 @@ public class ThemeController: ControllerBase
     }
 
     [HttpPut("{plannerId:guid}/{themeId:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateThemeAsync(Guid plannerId, Guid themeId, [FromBody] ThemeDto theme, CancellationToken cancellationToken)
     {
         if ( plannerId != theme.plannerId && themeId != theme.themeId) return BadRequest ("ID in URL doesn't match the body"); 

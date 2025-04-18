@@ -11,9 +11,9 @@ builder.Services.RegisterServices();
 builder.Services.AddAuthentication();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddSwaggerGen(
-    setupAction =>
+setupAction =>
 {
-    setupAction.AddSecurityDefinition("CityInfoApiBearerAuth", new ()
+    setupAction.AddSecurityDefinition("CrowdFestApiBearerAuth", new ()
     {
         Type = SecuritySchemeType.Http,
         Scheme = "Bearer",
@@ -27,7 +27,7 @@ builder.Services.AddSwaggerGen(
             {
                 Reference = new OpenApiReference {
                     Type = ReferenceType.SecurityScheme,
-                    Id = "CityInfoApiBearerAuth"
+                    Id = "CrowdFestApiBearerAuth"
                 }
             },
             new List<string>()

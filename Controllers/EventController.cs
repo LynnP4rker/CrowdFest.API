@@ -23,6 +23,8 @@ public class EventController: ControllerBase
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<EventDto>> RetrieveEventAsync(Guid id, CancellationToken cancellationToken)
     {   
         EventEntity? eventEntity = await _repository.RetrieveAsync(id, cancellationToken);
@@ -32,6 +34,7 @@ public class EventController: ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<EventDto>>> ListEventsAsync(CancellationToken cancellationToken)
     {
         IEnumerable<EventEntity> eventEntities = await _repository.ListAsync(cancellationToken);
@@ -40,6 +43,7 @@ public class EventController: ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateEventAsync([FromBody] EventDto eventDto, CancellationToken cancellationToken)
     {
         EventEntity eventEntity = _mapper.Map<EventEntity>(eventDto);
@@ -50,6 +54,8 @@ public class EventController: ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RemoveEventAsync(Guid id, CancellationToken cancellationToken)
     {
         EventEntity? eventEntity = await _repository.RetrieveAsync(id, cancellationToken);
@@ -59,6 +65,9 @@ public class EventController: ControllerBase
     }
 
     [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateEventAsync(Guid id, [FromBody] EventDto eventDto, CancellationToken cancellationToken)
     {
         if (id != eventDto.id) { return BadRequest ("ID in URL doesn't match the body"); }
