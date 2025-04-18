@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 [ApiController]
 [Route("api/[controller]")]
+[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 public class AuthenticationController: ControllerBase
 {
     private readonly IConfiguration _configuration;
@@ -17,9 +18,12 @@ public class AuthenticationController: ControllerBase
 
     public AuthenticationController(IConfiguration configuration, IUserRepository repository, IPasswordService password)
     {
-        _configuration = configuration;
-        _repository = repository;
-        _password = password;
+        _configuration = configuration
+            ?? throw new ArgumentNullException(nameof(configuration));
+        _repository = repository
+            ?? throw new ArgumentNullException(nameof(repository));
+        _password = password
+            ?? throw new ArgumentNullException(nameof(password));
     }
 
     [HttpPost]
