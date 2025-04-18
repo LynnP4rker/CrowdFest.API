@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity;
 public interface IPasswordService
 {
     string Hash(string password);
-    bool Verfiy(string passwordHash, string password);
+    bool Verify(string passwordHash, string password);
 }
 public class PasswordService: IPasswordService
 {
@@ -21,7 +21,7 @@ public class PasswordService: IPasswordService
         return string.Join(Delimiter, Convert.ToBase64String(salt), Convert.ToBase64String(hash));
     }
 
-    public bool Verfiy(string passwordHash, string password)
+    public bool Verify(string passwordHash, string password)
     {
         var elements = passwordHash.Split(Delimiter);
         var salt = Convert.FromBase64String(elements[0]);

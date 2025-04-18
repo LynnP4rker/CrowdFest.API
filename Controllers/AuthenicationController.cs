@@ -32,7 +32,7 @@ public class AuthenticationController: ControllerBase
         if(userEntity is null) return Unauthorized("Invalid details");
 
         //Step 2: Verify the password
-        bool isPasswordValid = _password.Verfiy(userEntity.passwordHash, user.password);
+        bool isPasswordValid = _password.Verify(userEntity.passwordHash, user.password);
         if (!isPasswordValid) return Unauthorized("Invalid details");
 
         //Step 3: Create a token
