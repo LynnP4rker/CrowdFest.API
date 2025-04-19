@@ -147,7 +147,7 @@ public class PostController: ControllerBase
             return NoContent();
         } catch (Exception ex)
         {
-            _logger.LogError($"Unable to update post with post id: {postId} {post}");
+            _logger.LogError($"Unable to update post with post id: {postId} {post}", ex);
             return StatusCode(500, "A problem happened while trying to process your request");
         }
     }
