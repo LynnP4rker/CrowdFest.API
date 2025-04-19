@@ -4,7 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 public class CrowdFestDbContext: DbContext
 {
-    public CrowdFestDbContext(DbContextOptions<CrowdFestDbContext> options) : base(options) { }
+    private readonly IEncryptionService _encryption;
+    public CrowdFestDbContext(DbContextOptions<CrowdFestDbContext> options, IEncryptionService encryption) : base(options) 
+    { 
+        _encryption = encryption;
+    }
 
     public DbSet<EventEntity> events { get; set; }
     public DbSet<GroupEntity> groups { get; set; }
@@ -28,6 +32,62 @@ public class CrowdFestDbContext: DbContext
         modelBuilder.ApplyConfiguration(new ThemeConfiguration());
         modelBuilder.ApplyConfiguration(new VoteConfiguration());
 
-        // For future Lynn, encryption for PII in the fields go here
+        //Encryption for data
+        modelBuilder.Entity<UserEntity>()
+            .Property(u => u.emailAddress)
+            .HasConversion(
+                u => _encryption.Encrypt(u),
+                u => _encryption.Decrypt(u)
+            );
+
+        modelBuilder.Entity<UserEntity>()
+            .Property(u => u.firstName)
+            .HasConversion(
+                u => _encryption.Encrypt(u),
+                u => _encryption.Decrypt(u)
+            );
+
+        modelBuilder.Entity<UserEntity>()
+            .Property(u => u.lastName)
+            .HasConversion(
+                u => _encryption.Encrypt(u),
+                u => _encryption.Decrypt(u)
+            );
+        
+        modelBuilder.Entity<PlannerEntity>()
+            .Property(p => p.displayName)
+            .HasConversion(
+                p => _encryption.Encrypt(p),
+                p => _encryption.Decrypt(p)
+            );
+
+        modelBuilder.Entity<PlannerEntity>()
+            .Property(p => p.firstName)
+            .HasConversion(
+                p => _encryption.Encrypt(p),
+                p => _encryption.Decrypt(p)
+            );
+        
+        modelBuilder.Entity<PlannerEntity>()
+            .Property(p => p.lastName)
+            .HasConversion(
+                p => _encryption.Encrypt(p),
+                p => _encryption.Decrypt(p)
+            );
+        
+        modelBuilder.Entity<PlannerEntity>()
+            .Property(p => p.emailAddress)
+            .HasConversion(
+                p => _encryption.Encrypt(p),
+                p => _encryption.Decrypt(p)
+            );
+        
+        modelBuilder.Entity<PlannerEntity>()
+            .Property(p => p.phoneNumber)
+            .HasConversion(
+                p => _encryption.Encrypt(p),
+                p => _encryption.Decrypt(p)
+            );
+
     }
 }

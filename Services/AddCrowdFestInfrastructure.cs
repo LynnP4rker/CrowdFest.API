@@ -17,6 +17,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IVoteRepository, VoteRepository>();
         services.AddScoped<IPasswordService, PasswordService>();
+        services.AddScoped<IEncryptionService, EncryptionService>();
 
         return services;
     }
