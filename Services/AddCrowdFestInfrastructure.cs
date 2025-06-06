@@ -11,10 +11,10 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IGroupRepository, GroupRepository>();
         services.AddScoped<ILocationRepository, LocationRepository>();
         services.AddScoped<IPlannerGroupRepository, PlannerGroupRepository>();
+        services.AddScoped<IPlannerAccountRepository, PlannerAccountRepository>();
         services.AddScoped<IPlannerRepository, PlannerRepository>();
         services.AddScoped<IPostRepository, PostRepository>();
         services.AddScoped<IThemeRepository, ThemeRepository>();
-        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IVoteRepository, VoteRepository>();
         services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<IEncryptionService, EncryptionService>();

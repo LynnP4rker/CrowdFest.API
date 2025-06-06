@@ -42,6 +42,13 @@ internal sealed class PlannerRepository : IPlannerRepository
             .FirstOrDefaultAsync(p => p.id.Equals(id), cancellationToken);
     }
 
+    public Task<PlannerEntity?> RetrieveEmailAsync(string emailAddress, CancellationToken cancellationToken)
+    {
+        return _context.planners
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.emailAddress.Equals(emailAddress), cancellationToken);
+    }
+
     public Task SaveChangesAsync(CancellationToken cancellationToken)
     {
         return _context.SaveChangesAsync(cancellationToken);

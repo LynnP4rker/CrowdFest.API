@@ -27,9 +27,6 @@ public class MapperProfile: Profile
         CreateMap<LocationDto, LocationEntity>();
         CreateMap<LocationEntity, LocationDto>();
 
-        CreateMap<UserDto, UserEntity>();
-        CreateMap<UserEntity, UserDto>();
-
-        CreateMap<RegisterDto, UserEntity>();
+        CreateMap<RegisterDto, PlannerEntity>();
     }
 }

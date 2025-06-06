@@ -15,9 +15,9 @@ public class CrowdFestDbContext: DbContext
     public DbSet<LocationEntity> locations { get; set; }
     public DbSet<PlannerEntity> planners { get; set; }
     public DbSet<PlannerGroupEntity> plannerGroups { get; set; }
+    public DbSet<PlannerAccountEntity> plannerAccounts { get; set; }
     public DbSet<PostEntity> posts { get; set; }
     public DbSet<ThemeEntity> themes { get; set; }
-    public DbSet<UserEntity> users { get; set; }
     public DbSet<VoteEntity> votes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -33,27 +33,6 @@ public class CrowdFestDbContext: DbContext
         modelBuilder.ApplyConfiguration(new VoteConfiguration());
 
         //Encryption for data
-        modelBuilder.Entity<UserEntity>()
-            .Property(u => u.emailAddress)
-            .HasConversion(
-                u => _encryption.Encrypt(u),
-                u => _encryption.Decrypt(u)
-            );
-
-        modelBuilder.Entity<UserEntity>()
-            .Property(u => u.firstName)
-            .HasConversion(
-                u => _encryption.Encrypt(u),
-                u => _encryption.Decrypt(u)
-            );
-
-        modelBuilder.Entity<UserEntity>()
-            .Property(u => u.lastName)
-            .HasConversion(
-                u => _encryption.Encrypt(u),
-                u => _encryption.Decrypt(u)
-            );
-        
         modelBuilder.Entity<PlannerEntity>()
             .Property(p => p.displayName)
             .HasConversion(

@@ -1,6 +1,6 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
 using CrowdFest.API.Abstractions.Repositories;
 using CrowdFest.API.Entities;
 using CrowdFest.API.Models;
@@ -13,10 +13,11 @@ using Microsoft.IdentityModel.Tokens;
 public class AuthenticationController: ControllerBase
 {
     private readonly IConfiguration _configuration;
-    private readonly IUserRepository _repository;
+    private readonly IPlannerRepository _repository;
+    private readonly IPlannerAccountRepository _account;
     private readonly IPasswordService _password;
 
-    public AuthenticationController(IConfiguration configuration, IUserRepository repository, IPasswordService password)
+    public AuthenticationController(IConfiguration configuration, IPlannerRepository repository, IPasswordService password, IPlannerAccountRepository account)
     {
         _configuration = configuration
             ?? throw new ArgumentNullException(nameof(configuration));
@@ -24,6 +25,8 @@ public class AuthenticationController: ControllerBase
             ?? throw new ArgumentNullException(nameof(repository));
         _password = password
             ?? throw new ArgumentNullException(nameof(password));
+        _account = account
+            ?? throw new ArgumentNullException(nameof(account));
     }
 
     [HttpPost]
@@ -32,37 +35,30 @@ public class AuthenticationController: ControllerBase
     )
     {
         //Step 1: Retrieve the user
-        UserEntity? userEntity = await _repository.RetrieveAsync(user.emailAddress, cancellationToken);
-        if(userEntity is null) return Unauthorized("Invalid details");
+        PlannerEntity? plannerEntity = await _repository.RetrieveEmailAsync(user.emailAddress, cancellationToken);
+        if(plannerEntity is null) return Unauthorized("Invalid details");
 
         //Step 2: Verify the password
-        bool isPasswordValid = _password.Verify(userEntity.passwordHash, user.password);
+        bool isPasswordValid = _password.Verify(plannerEntity.passwordHash, user.password);
         if (!isPasswordValid) return Unauthorized("Invalid details");
 
-        //Step 3: Create a token
-        var securityKey = new SymmetricSecurityKey(
-            Convert.FromBase64String(_configuration["Authentication:SecretForKey"]));
-        
-        var signingCredentials = new SigningCredentials(
-            securityKey, SecurityAlgorithms.HmacSha256);
-        
-        var claimsForToken = new List<Claim>();
-        claimsForToken.Add(new Claim("sub", userEntity.id.ToString()));
-        claimsForToken.Add(new Claim("first_name", userEntity.lastName));
-        claimsForToken.Add(new Claim("last_name", userEntity.lastName));
+        //Generate Otp
+        string otp = RandomNumberGenerator.GetInt32(100000, 999999).ToString("D6");
 
-        var jwtSecurityToken = new JwtSecurityToken(
-            _configuration["Authentication:Issuer"],
-            _configuration["Authentication:Audience"],
-            claimsForToken,
-            DateTime.UtcNow,
-            DateTime.UtcNow.AddMinutes(15),
-            signingCredentials
-        );
+        PlannerAccountEntity? accountEntity = await _account.RetrieveAsync(plannerEntity.id, cancellationToken);
+        if (accountEntity is null)
+        {
+            return Unauthorized("Invalid details");
+        }
 
-        var tokenToReturn = new JwtSecurityTokenHandler()
-            .WriteToken(jwtSecurityToken);
-        
-        return Ok(tokenToReturn);
+        accountEntity.id = plannerEntity.id;
+        accountEntity.Otp = otp;
+        accountEntity.GeneratedAt = DateTime.UtcNow;
+        accountEntity.ExpiresAt = DateTime.UtcNow.AddMinutes(15);
+
+        await _account.UpdateAsync(accountEntity, cancellationToken);
+        await _account.SaveChangesAsync(cancellationToken);
+
+        return Ok("OTP sent. Please verify to login");
     }
 }

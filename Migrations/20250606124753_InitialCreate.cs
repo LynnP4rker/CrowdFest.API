@@ -48,32 +48,14 @@ namespace CrowdFest.API.Migrations
                     dob = table.Column<DateOnly>(type: "date", nullable: false),
                     emailAddress = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
+                    passwordHash = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     phoneNumber = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_planners", x => x.id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "users",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    emailAddress = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    passwordHash = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    firstName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    lastName = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_users", x => x.id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -96,6 +78,28 @@ namespace CrowdFest.API.Migrations
                     table.ForeignKey(
                         name: "FK_locations_planners_plannerId",
                         column: x => x.plannerId,
+                        principalTable: "planners",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "plannerAccounts",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Otp = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    GeneratedAt = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    ExpiresAt = table.Column<DateTime>(type: "datetime(6)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_plannerAccounts", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_plannerAccounts_planners_id",
+                        column: x => x.id,
                         principalTable: "planners",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -356,13 +360,13 @@ namespace CrowdFest.API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "plannerAccounts");
+
+            migrationBuilder.DropTable(
                 name: "plannerGroups");
 
             migrationBuilder.DropTable(
                 name: "posts");
-
-            migrationBuilder.DropTable(
-                name: "users");
 
             migrationBuilder.DropTable(
                 name: "votes");

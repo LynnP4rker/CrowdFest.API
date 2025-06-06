@@ -11,6 +11,7 @@ public class PlannerEntity
     public Gender gender { get; set; }
     public DateOnly dob { get; set; }
     public string emailAddress { get; set; }
+    public string passwordHash { get; set; }
     public string phoneNumber { get; set; }
 
     public PlannerEntity()
@@ -19,6 +20,7 @@ public class PlannerEntity
         firstName = String.Empty;
         lastName = String.Empty;
         emailAddress = String.Empty;
+        passwordHash = String.Empty;
         phoneNumber = String.Empty;
     }
 }

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrowdFest.API.Migrations
 {
     [DbContext(typeof(CrowdFestDbContext))]
-    [Migration("20250416170806_InitialCreate")]
+    [Migration("20250606124753_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -127,6 +127,25 @@ namespace CrowdFest.API.Migrations
                     b.ToTable("locations");
                 });
 
+            modelBuilder.Entity("CrowdFest.API.Entities.PlannerAccountEntity", b =>
+                {
+                    b.Property<Guid>("id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("GeneratedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<string>("Otp")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("id");
+
+                    b.ToTable("plannerAccounts");
+                });
+
             modelBuilder.Entity("CrowdFest.API.Entities.PlannerEntity", b =>
                 {
                     b.Property<Guid>("id")
@@ -153,6 +172,10 @@ namespace CrowdFest.API.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("lastName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("passwordHash")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -237,33 +260,6 @@ namespace CrowdFest.API.Migrations
                     b.ToTable("themes");
                 });
 
-            modelBuilder.Entity("CrowdFest.API.Entities.UserEntity", b =>
-                {
-                    b.Property<Guid>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("emailAddress")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("firstName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("lastName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("passwordHash")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.HasKey("id");
-
-                    b.ToTable("users");
-                });
-
             modelBuilder.Entity("CrowdFest.API.Entities.VoteEntity", b =>
                 {
                     b.Property<Guid>("id")
@@ -345,6 +341,15 @@ namespace CrowdFest.API.Migrations
                     b.HasOne("CrowdFest.API.Entities.PlannerEntity", null)
                         .WithMany()
                         .HasForeignKey("plannerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CrowdFest.API.Entities.PlannerAccountEntity", b =>
+                {
+                    b.HasOne("CrowdFest.API.Entities.PlannerEntity", null)
+                        .WithOne()
+                        .HasForeignKey("CrowdFest.API.Entities.PlannerAccountEntity", "id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -16,6 +16,12 @@ public sealed class PlannerConfiguration : IEntityTypeConfiguration<PlannerEntit
 
         //Relationship configuration
         builder
+            .HasOne<PlannerAccountEntity>()
+            .WithOne()
+            .HasForeignKey<PlannerAccountEntity>(p => p.id)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder
             .HasMany<PlannerGroupEntity>()
             .WithOne()
             .HasForeignKey(p => p.plannerId)
