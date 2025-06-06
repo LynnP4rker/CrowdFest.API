@@ -6,6 +6,7 @@ public class GroupEntity
     public string name { get; set; }
     public string nameNormalised { get; set; }
     public string description { get; set; }
+    public bool isOrganisationGroup { get; set; }
 
     public GroupEntity()
     {

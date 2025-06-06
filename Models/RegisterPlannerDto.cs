@@ -1,5 +1,5 @@
 using CrowdFest.API.Enums;
-public record RegisterDto(
+public record RegisterPlannerDto(
     string displayName,
     string firstName,
     string lastName,

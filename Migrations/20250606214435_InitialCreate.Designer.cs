@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrowdFest.API.Migrations
 {
     [DbContext(typeof(CrowdFestDbContext))]
-    [Migration("20250606124753_InitialCreate")]
+    [Migration("20250606214435_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -80,6 +80,9 @@ namespace CrowdFest.API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("isOrganisationGroup")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -127,6 +130,79 @@ namespace CrowdFest.API.Migrations
                     b.ToTable("locations");
                 });
 
+            modelBuilder.Entity("CrowdFest.API.Entities.OrganizationAccountEntity", b =>
+                {
+                    b.Property<Guid>("id")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime?>("GeneratedAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("isVerified")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("otp")
+                        .HasColumnType("longtext");
+
+                    b.HasKey("id");
+
+                    b.ToTable("organisationAccounts");
+                });
+
+            modelBuilder.Entity("CrowdFest.API.Entities.OrganizationEntity", b =>
+                {
+                    b.Property<Guid>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("Address1")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Address2")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("PostCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("emailAddress")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("nameNormalised")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("passwordHash")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("telephoneNumber")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("id");
+
+                    b.ToTable("organisations");
+                });
+
             modelBuilder.Entity("CrowdFest.API.Entities.PlannerAccountEntity", b =>
                 {
                     b.Property<Guid>("id")
@@ -140,6 +216,9 @@ namespace CrowdFest.API.Migrations
 
                     b.Property<string>("Otp")
                         .HasColumnType("longtext");
+
+                    b.Property<bool>("isVerified")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("id");
 
@@ -341,6 +420,15 @@ namespace CrowdFest.API.Migrations
                     b.HasOne("CrowdFest.API.Entities.PlannerEntity", null)
                         .WithMany()
                         .HasForeignKey("plannerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CrowdFest.API.Entities.OrganizationAccountEntity", b =>
+                {
+                    b.HasOne("CrowdFest.API.Entities.OrganizationEntity", null)
+                        .WithOne()
+                        .HasForeignKey("CrowdFest.API.Entities.OrganizationAccountEntity", "id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -16,6 +16,8 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPostRepository, PostRepository>();
         services.AddScoped<IThemeRepository, ThemeRepository>();
         services.AddScoped<IVoteRepository, VoteRepository>();
+        services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+        services.AddScoped<IOrganizationAccountRepository, OrganizationAccountRepository>();
         services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<IEncryptionService, EncryptionService>();
 

@@ -19,6 +19,8 @@ public class CrowdFestDbContext: DbContext
     public DbSet<PostEntity> posts { get; set; }
     public DbSet<ThemeEntity> themes { get; set; }
     public DbSet<VoteEntity> votes { get; set; }
+    public DbSet<OrganizationEntity> organisations { get; set; }
+    public DbSet<OrganizationAccountEntity> organisationAccounts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,6 +31,7 @@ public class CrowdFestDbContext: DbContext
         modelBuilder.ApplyConfiguration(new LocationConfiguration());
         modelBuilder.ApplyConfiguration(new PlannerConfiguration());
         modelBuilder.ApplyConfiguration(new PlannerGroupConfiguration());
+        modelBuilder.ApplyConfiguration(new OrganizationConfiguration());
         modelBuilder.ApplyConfiguration(new ThemeConfiguration());
         modelBuilder.ApplyConfiguration(new VoteConfiguration());
 
@@ -67,6 +70,5 @@ public class CrowdFestDbContext: DbContext
                 p => _encryption.Encrypt(p),
                 p => _encryption.Decrypt(p)
             );
-
     }
 }
