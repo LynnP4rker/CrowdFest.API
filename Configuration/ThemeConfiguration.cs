@@ -18,10 +18,6 @@ public sealed class ThemeConfiguration : IEntityTypeConfiguration<ThemeEntity>
             .HasIndex(t => t.nameNormalised)
             .IsUnique();
         
-        builder
-            .Property(t => t.description)
-            .HasMaxLength(Constants.DESCRIPTIONLENGTH);
-        
         //Relationship Configuration
         builder
             .HasKey(t => t.themeId);

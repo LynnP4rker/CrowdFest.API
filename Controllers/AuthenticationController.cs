@@ -72,8 +72,8 @@ public class AuthenticationController: ControllerBase
         
         var claimsForToken = new List<Claim>();
         claimsForToken.Add(new Claim("sub", plannerEntity.id.ToString()));
-        claimsForToken.Add(new Claim("first_name", plannerEntity.firstName));
-        claimsForToken.Add(new Claim("last_name", plannerEntity.lastName));
+        claimsForToken.Add(new Claim("display_name", plannerEntity.displayName));
+        claimsForToken.Add(new Claim("email", plannerEntity.emailAddress));
 
         var jwtSecurityToken = new JwtSecurityToken(
             _configuration["Authentication:Issuer"],

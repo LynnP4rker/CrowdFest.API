@@ -68,7 +68,7 @@ public class AccountController: ControllerBase
             await _plannerAccount.CreateAsync(plannerAccountEntity, cancellationToken);
             await _plannerRepository.SaveChangesAsync(cancellationToken);
 
-            return Ok();
+            return Ok($"{plannerEntity.id}");
         } catch (Exception ex)
         {
             _logger.LogError($"Unable to create planner with email: {planner.emailAddress}", ex);

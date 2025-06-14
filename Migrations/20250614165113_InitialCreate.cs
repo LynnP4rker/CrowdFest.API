@@ -19,13 +19,19 @@ namespace CrowdFest.API.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    name = table.Column<string>(type: "longtext", nullable: false)
+                    Name = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    nameNormalised = table.Column<string>(type: "varchar(255)", nullable: false)
+                    GroupLeaderId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    IsPrivate = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    IsOrganisationGroup = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    RequiresApproval = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Description = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "longtext", nullable: false)
+                    NameNormalised = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    isOrganisationGroup = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    AccessCode = table.Column<string>(type: "longtext", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
@@ -72,18 +78,18 @@ namespace CrowdFest.API.Migrations
                     id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     displayName = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    firstName = table.Column<string>(type: "longtext", nullable: false)
+                    firstName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    lastName = table.Column<string>(type: "longtext", nullable: false)
+                    lastName = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    gender = table.Column<string>(type: "longtext", nullable: false)
+                    gender = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    dob = table.Column<DateOnly>(type: "date", nullable: false),
+                    dob = table.Column<DateOnly>(type: "date", nullable: true),
                     emailAddress = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     passwordHash = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    phoneNumber = table.Column<string>(type: "longtext", nullable: false)
+                    phoneNumber = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -121,11 +127,14 @@ namespace CrowdFest.API.Migrations
                 {
                     locationId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     plannerId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    name = table.Column<string>(type: "longtext", nullable: false)
+                    address1 = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    nameNormalised = table.Column<string>(type: "varchar(255)", nullable: false)
+                    address2 = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "longtext", nullable: false)
+                    city = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    county = table.Column<int>(type: "int", nullable: false),
+                    postCode = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -219,8 +228,6 @@ namespace CrowdFest.API.Migrations
                     name = table.Column<string>(type: "varchar(30)", maxLength: 30, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     nameNormalised = table.Column<string>(type: "varchar(255)", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    description = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
@@ -241,17 +248,19 @@ namespace CrowdFest.API.Migrations
                 {
                     id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     groupId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    attendees = table.Column<int>(type: "int", nullable: false),
-                    absentees = table.Column<int>(type: "int", nullable: false),
                     title = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    locationId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    category = table.Column<int>(type: "int", nullable: false),
                     themeId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
+                    date = table.Column<DateOnly>(type: "date", nullable: false),
+                    time = table.Column<TimeSpan>(type: "time(6)", nullable: false),
+                    locationId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
                     priority = table.Column<string>(type: "longtext", nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    attendees = table.Column<int>(type: "int", nullable: false),
+                    absentees = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -266,12 +275,14 @@ namespace CrowdFest.API.Migrations
                         name: "FK_events_locations_locationId",
                         column: x => x.locationId,
                         principalTable: "locations",
-                        principalColumn: "locationId");
+                        principalColumn: "locationId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_events_themes_themeId",
                         column: x => x.themeId,
                         principalTable: "themes",
-                        principalColumn: "themeId");
+                        principalColumn: "themeId",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -335,25 +346,17 @@ namespace CrowdFest.API.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_events_locationId",
                 table: "events",
-                column: "locationId",
-                unique: true);
+                column: "locationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_events_themeId",
                 table: "events",
-                column: "themeId",
-                unique: true);
+                column: "themeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_groups_nameNormalised",
+                name: "IX_groups_NameNormalised",
                 table: "groups",
-                column: "nameNormalised",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_locations_nameNormalised",
-                table: "locations",
-                column: "nameNormalised",
+                column: "NameNormalised",
                 unique: true);
 
             migrationBuilder.CreateIndex(

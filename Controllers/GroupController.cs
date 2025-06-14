@@ -78,10 +78,15 @@ public class GroupController: ControllerBase
         }
         try {
             GroupEntity groupEntity = _mapper.Map<GroupEntity>(group);
+            Random rnd = new Random();
+
+#warning use alphanumermical values would be better
+            int randomNumber = rnd.Next(000000, 999999);
+
+            groupEntity.AccessCode = randomNumber.ToString();
             await _repository.CreateAsync(groupEntity, cancellationToken);
             await _repository.SaveChangesAsync(cancellationToken);
-            GroupDto returnedGroup = _mapper.Map<GroupDto>(groupEntity);
-            return CreatedAtAction(nameof(RetrieveGroupAsync), new { id = groupEntity.id}, returnedGroup);
+            return Ok();
         } catch (Exception ex)
         {
             _logger.LogError($"Unable to create group {group}", ex);

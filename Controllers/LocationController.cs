@@ -66,6 +66,21 @@ public class LocationController: ControllerBase
         }
     }
 
+    [HttpGet("planner/{id}")]
+    public async Task<ActionResult<IEnumerable<LocationDto>>> ListLocationsForPlannerAsync(Guid id, CancellationToken cancellationToken)
+    {
+        try 
+        {
+            IEnumerable<LocationEntity> locationEntities = await _repository.ListLocationsForPlanner(id, cancellationToken);
+            IEnumerable<LocationDto> locations = _mapper.Map<IEnumerable<LocationDto>>(locationEntities);
+            return Ok(locations);
+        } catch (Exception ex)
+        {
+            _logger.LogError(ex, "Unable to retrieve locations");
+            return StatusCode(500, "A problem happened while trying to process your request");
+        }
+    }
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -80,8 +95,10 @@ public class LocationController: ControllerBase
             LocationEntity locationEntity = _mapper.Map<LocationEntity>(location);
             await _repository.CreateAsync(locationEntity, cancellationToken);
             await _repository.SaveChangesAsync(cancellationToken);
-            LocationDto returnedLocation = _mapper.Map<LocationDto>(locationEntity);
-            return CreatedAtAction(nameof(RetrieveLocationAsync), new { id = locationEntity.locationId}, returnedLocation);
+
+            LocationDto locationDto = _mapper.Map<LocationDto>(locationEntity);
+            return Ok(locationDto.locationId);
+            
         } catch (Exception ex)
         {
             _logger.LogError($"Unable to create location: {location}", ex);

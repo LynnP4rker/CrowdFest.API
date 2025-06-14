@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CrowdFest.API.Migrations
 {
     [DbContext(typeof(CrowdFestDbContext))]
-    [Migration("20250606214435_InitialCreate")]
+    [Migration("20250614165113_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -33,8 +33,11 @@ namespace CrowdFest.API.Migrations
                     b.Property<int>("attendees")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("date")
-                        .HasColumnType("datetime(6)");
+                    b.Property<int>("category")
+                        .HasColumnType("int");
+
+                    b.Property<DateOnly>("date")
+                        .HasColumnType("date");
 
                     b.Property<string>("description")
                         .IsRequired()
@@ -53,6 +56,9 @@ namespace CrowdFest.API.Migrations
                     b.Property<Guid>("themeId")
                         .HasColumnType("char(36)");
 
+                    b.Property<TimeSpan>("time")
+                        .HasColumnType("time(6)");
+
                     b.Property<string>("title")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -61,11 +67,9 @@ namespace CrowdFest.API.Migrations
 
                     b.HasIndex("groupId");
 
-                    b.HasIndex("locationId")
-                        .IsUnique();
+                    b.HasIndex("locationId");
 
-                    b.HasIndex("themeId")
-                        .IsUnique();
+                    b.HasIndex("themeId");
 
                     b.ToTable("events");
                 });
@@ -76,24 +80,38 @@ namespace CrowdFest.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("description")
-                        .IsRequired()
+                    b.Property<string>("AccessCode")
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("isOrganisationGroup")
+                    b.Property<string>("Description")
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("GroupLeaderId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<bool>("IsOrganisationGroup")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("name")
+                    b.Property<bool>("IsPrivate")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("nameNormalised")
+                    b.Property<string>("NameNormalised")
                         .IsRequired()
                         .HasColumnType("varchar(255)");
 
+                    b.Property<bool>("RequiresApproval")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.HasKey("id");
 
-                    b.HasIndex("nameNormalised")
+                    b.HasIndex("NameNormalised")
                         .IsUnique();
 
                     b.ToTable("groups");
@@ -105,25 +123,28 @@ namespace CrowdFest.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("description")
+                    b.Property<string>("address1")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("name")
+                    b.Property<string>("address2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("city")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("nameNormalised")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
+                    b.Property<int>("county")
+                        .HasColumnType("int");
 
                     b.Property<Guid>("plannerId")
                         .HasColumnType("char(36)");
 
-                    b.HasKey("locationId");
+                    b.Property<string>("postCode")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.HasIndex("nameNormalised")
-                        .IsUnique();
+                    b.HasKey("locationId");
 
                     b.HasIndex("plannerId");
 
@@ -235,7 +256,7 @@ namespace CrowdFest.API.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<DateOnly>("dob")
+                    b.Property<DateOnly?>("dob")
                         .HasColumnType("date");
 
                     b.Property<string>("emailAddress")
@@ -243,15 +264,12 @@ namespace CrowdFest.API.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("firstName")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("gender")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("lastName")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("passwordHash")
@@ -259,7 +277,6 @@ namespace CrowdFest.API.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("phoneNumber")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.HasKey("id");
@@ -311,11 +328,6 @@ namespace CrowdFest.API.Migrations
                     b.Property<Guid>("themeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("description")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("name")
                         .IsRequired()
@@ -403,15 +415,15 @@ namespace CrowdFest.API.Migrations
                         .IsRequired();
 
                     b.HasOne("CrowdFest.API.Entities.LocationEntity", null)
-                        .WithOne()
-                        .HasForeignKey("CrowdFest.API.Entities.EventEntity", "locationId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .WithMany()
+                        .HasForeignKey("locationId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("CrowdFest.API.Entities.ThemeEntity", null)
-                        .WithOne()
-                        .HasForeignKey("CrowdFest.API.Entities.EventEntity", "themeId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .WithMany()
+                        .HasForeignKey("themeId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 

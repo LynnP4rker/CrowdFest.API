@@ -37,6 +37,17 @@ internal sealed class LocationRepository : ILocationRepository
         return entities;
     }
 
+    public async Task<IEnumerable<LocationEntity>> ListLocationsForPlanner(Guid id, CancellationToken cancellationToken)
+    {
+        IEnumerable<LocationEntity> entities =
+            await _context.locations
+                .AsNoTracking()
+                .Where(l => l.plannerId.Equals(id))
+                .ToArrayAsync(cancellationToken);
+
+        return entities;
+    }
+
     public Task<LocationEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken)
     {
         return _context.locations

@@ -31,12 +31,12 @@ public class EventController: ControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<EventDto>> RetrieveEventAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<ActionResult<EventDto>> RetrieveEventAsync(Guid groupId, CancellationToken cancellationToken)
     {   try {
-            EventEntity? eventEntity = await _repository.RetrieveAsync(id, cancellationToken);
+            EventEntity? eventEntity = await _repository.RetrieveAsync(groupId, cancellationToken);
 
             if (eventEntity is null) { 
-                _logger.LogInformation($"Unable to retrieve event of event id: {id}"); 
+                _logger.LogInformation($"Unable to retrieve event of group id: {groupId}"); 
                 return NotFound(); 
             }
 
@@ -45,7 +45,7 @@ public class EventController: ControllerBase
 
         } catch (Exception ex) { 
             _logger.LogError(
-                $"Exception while getting event of event id: {id}", ex
+                $"Exception while getting event of group id: {groupId}", ex
             );
             return StatusCode(500, "A problem happened while trying to process your request");
         }
@@ -57,6 +57,22 @@ public class EventController: ControllerBase
     {
         try {
             IEnumerable<EventEntity> eventEntities = await _repository.ListAsync(cancellationToken);
+            IEnumerable<EventDto> events = _mapper.Map<IEnumerable<EventDto>>(eventEntities);
+            return Ok(events);
+        } catch (Exception ex) {
+            _logger.LogError(
+                ex, "Exception while getting events"
+            );
+            return StatusCode(500, "A problem happened while trying to process your request");
+        }
+    }
+
+    [HttpGet("groups/{groupId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<EventDto>>> ListEventsAsync(Guid groupId, CancellationToken cancellationToken)
+    {
+        try {
+            IEnumerable<EventEntity> eventEntities = await _repository.ListEventsByGroupAsync(groupId, cancellationToken);
             IEnumerable<EventDto> events = _mapper.Map<IEnumerable<EventDto>>(eventEntities);
             return Ok(events);
         } catch (Exception ex) {
@@ -80,8 +96,7 @@ public class EventController: ControllerBase
             EventEntity eventEntity = _mapper.Map<EventEntity>(eventDto);
             await _repository.CreateAsync(eventEntity, cancellationToken);
             await _repository.SaveChangesAsync(cancellationToken);
-            EventDto returnedEvent = _mapper.Map<EventDto>(eventEntity);
-            return CreatedAtAction(nameof(RetrieveEventAsync), new { id = eventEntity.id}, returnedEvent);
+            return Ok();
         } catch (Exception ex) {
             _logger.LogError(
                 $"Exception while creating event: {eventDto}", ex

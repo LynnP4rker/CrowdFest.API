@@ -13,18 +13,16 @@ public sealed class EventConfiguration : IEntityTypeConfiguration<EventEntity>
         builder
             .Property(e => e.priority)
             .HasConversion<string>();
-        
+
         builder
             .HasOne<LocationEntity>()
-            .WithOne()
-            .HasForeignKey<EventEntity>(l => l.locationId)
-            .OnDelete(DeleteBehavior.NoAction);
-        
+            .WithMany()
+            .HasForeignKey(l => l.locationId);
+
         builder
             .HasOne<ThemeEntity>()
-            .WithOne()
-            .HasForeignKey<EventEntity>(t => t.themeId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .WithMany()
+            .HasForeignKey(t => t.themeId);
         
         //Relationship configuration
         builder

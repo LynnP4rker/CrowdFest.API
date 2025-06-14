@@ -50,18 +50,18 @@ public class PlannerGroupController: ControllerBase
         }   
     }
 
-    [HttpGet]
+    [HttpGet("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<PlannerGroupDto>>> ListGroupsForPlannerAsync(Guid plannerId, CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<PlannerGroupDto>>> ListGroupsForPlannerAsync(Guid id, CancellationToken cancellationToken)
     { 
         try 
         {
-            IEnumerable<PlannerGroupEntity> plannerGroupEntities = await _repository.ListAsync(plannerId, cancellationToken);
+            IEnumerable<PlannerGroupEntity> plannerGroupEntities = await _repository.ListAsync(id, cancellationToken);
             IEnumerable<PlannerGroupDto> plannerGroups = _mapper.Map<IEnumerable<PlannerGroupDto>>(plannerGroupEntities);
             return Ok(plannerGroups);
         } catch (Exception ex)
         {
-            _logger.LogError($"Unable to retreieve planner group, plannerId: {plannerId}", ex);
+            _logger.LogError($"Unable to retreieve planner group, plannerId: {id}", ex);
             return StatusCode(500, "A problem happened while trying to process your request");
         }
     }

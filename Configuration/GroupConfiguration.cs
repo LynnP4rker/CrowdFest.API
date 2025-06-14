@@ -11,7 +11,7 @@ public sealed class GroupConfiguration : IEntityTypeConfiguration<GroupEntity>
     {
         //Property configuration
         builder
-            .HasIndex(g => g.nameNormalised)
+            .HasIndex(g => g.NameNormalised)
             .IsUnique();
         
         //Relationship configuration

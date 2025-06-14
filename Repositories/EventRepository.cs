@@ -36,6 +36,17 @@ internal sealed class EventRepository : IEventRepository
         return eventEntities;
     }
 
+    public async Task<IEnumerable<EventEntity>> ListEventsByGroupAsync(Guid groupId, CancellationToken cancellationToken)
+    {
+        IEnumerable<EventEntity> eventEntities =
+            await _context.events
+                .AsNoTracking()
+                .Where(e => e.groupId.Equals(groupId))
+                .ToArrayAsync(cancellationToken);
+
+        return eventEntities;
+    }
+
     public Task<EventEntity?> RetrieveAsync(Guid id, CancellationToken cancellationToken)
     {
         return _context.events
